@@ -1,33 +1,57 @@
 package cybersoft.backend.java12.gira.role.entity;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import cybersoft.backend.java12.gira.common.entity.BaseEntity;
 
-@Entity(name="gira_group")
+
+@Entity
+@Table(name = "gira_group")
 public class Group extends BaseEntity {
-	
+	@NotNull(message ="{group.name.not-blank}")
+	@Size(min = 3, max = 50, message = "{group.name.size}")
 	private String name;
-	private String decription;
 	
-//	@OneToMany(mappedBy = "group")
-//	private List<Role> roles = new ArrayList<>();
+	private String description;
 	
-	@ManyToMany(cascade = {CascadeType.MERGE , CascadeType.PERSIST})
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "gira_group_role",
-				joinColumns = @JoinColumn(name = "group_id"),
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	joinColumns = @JoinColumn(name = "group_id"),
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }
