@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import cybersoft.backend.java12.gira.common.entity.BaseEntity;
+import cybersoft.backend.java12.gira.user.entity.User;
 
 
 @Entity
@@ -30,6 +31,20 @@ public class Group extends BaseEntity {
 	joinColumns = @JoinColumn(name = "group_id"),
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "gira_group_user", joinColumns = @JoinColumn(name = "group_id"),
+										inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users = new HashSet<>();
+	
+	
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
 
 	public String getName() {
 		return name;
