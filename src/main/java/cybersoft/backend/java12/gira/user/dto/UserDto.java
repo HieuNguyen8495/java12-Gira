@@ -9,6 +9,7 @@ public interface UserDto {
 	// Spring Projection
 	public String getUsername();
 	public String getEmail();
+	public String getPassword();
 	public String getFullname();
 	public String getDisplayName();
 	public String getAvatar();

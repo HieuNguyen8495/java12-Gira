@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cybersoft.backend.java12.gira.common.ResponseHandler;
+import cybersoft.backend.java12.gira.dto.AddUserDto;
 import cybersoft.backend.java12.gira.dto.CreateGroupDto;
 import cybersoft.backend.java12.gira.dto.GroupDto;
 import cybersoft.backend.java12.gira.role.entity.Group;
 import cybersoft.backend.java12.gira.role.service.itf.GroupService;
+import cybersoft.backend.java12.gira.user.dto.CreateUserDto;
 
 @RestController
-@RequestMapping("/api/group")
+@RequestMapping("api/group")
 public class GroupController {
 	
 	private GroupService service;
@@ -45,5 +47,15 @@ public class GroupController {
 		
 		return ResponseHandler.getResponse(newGroup, HttpStatus.OK);
 				
+	}
+	
+	@PostMapping("/add-user")
+	public Object addUserToGroup(@Valid @RequestBody AddUserDto dto, BindingResult errors) {
+		if(errors.hasErrors())
+			return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+		
+		Group updateGroup = service.addNewUserToGroup(dto);
+		
+		return ResponseHandler.getResponse(updateGroup, HttpStatus.OK);
 	}
 }

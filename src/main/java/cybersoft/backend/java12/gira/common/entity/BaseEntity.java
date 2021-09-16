@@ -3,63 +3,58 @@ package cybersoft.backend.java12.gira.common.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
+import cybersoft.backend.java12.gira.common.util.DateUtils;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter // sử dụng lambok
+@Setter // sử dụng lambok
 @MappedSuperclass
-public class BaseEntity {
+@EntityListeners(AuditingEntityListener.class) // để JpaAuditing biết lớp BaseEntity này cần được tự động update những cột nào
+public class BaseEntity {                      // AuditingEntityListener.class => class mặc định có sẵn
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
-	protected Long id;
+	protected Long id; 
 	
 	@Version
 	protected int version;
-	protected String createdBy;
-	protected LocalDateTime createdAt;
-	protected String updateBy;
-	protected LocalDateTime updateAt;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public int getVersion() {
-		return version;
-	}
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	public String getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-	public String getUpdateBy() {
-		return updateBy;
-	}
-	public void setUpdateBy(String updateBy) {
-		this.updateBy = updateBy;
-	}
-	public LocalDateTime getUpdateAt() {
-		return updateAt;
-	}
-	public void setUpdateAt(LocalDateTime updateAt) {
-		this.updateAt = updateAt;
-	}
+	@CreatedBy
+	protected String createdBy;
+	
+	@CreatedDate
+	@LastModifiedDate
+	@DateTimeFormat(pattern = DateUtils.DATE_FORMAT) 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT ) 
+	protected LocalDateTime createdAt;
+	
+	@LastModifiedBy
+	protected String updateBy;
+	
+	@LastModifiedDate
+	@DateTimeFormat(pattern = DateUtils.DATE_FORMAT) // setup để dưới database hiện theo ý
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT ) // setup để json hiện theo ý
+	protected LocalDateTime updateAt;
 	
 	
 }

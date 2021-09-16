@@ -15,8 +15,6 @@ import cybersoft.backend.java12.gira.role.entity.Group;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-	
-	
 
 	@Transactional(readOnly = true)
 	@Query("SELECT g FROM Group g")
