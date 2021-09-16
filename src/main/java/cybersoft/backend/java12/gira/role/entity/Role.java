@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,9 +16,25 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import cybersoft.backend.java12.gira.common.entity.BaseEntity;
+import cybersoft.backend.java12.gira.role.util.HttpMethods;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"groups","programs"})
+@EqualsAndHashCode(exclude = {"groups","programs"}, callSuper = false)
 @Entity
 @Table(name="gira_role")
 public class Role extends BaseEntity {
@@ -34,15 +49,20 @@ public class Role extends BaseEntity {
 //	@ManyToOne
 //	private Group group;
 	
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST} , fetch = FetchType.LAZY)
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name = "gira_role_grogram" , joinColumns = @JoinColumn(name ="role_id"),
 							inverseJoinColumns = @JoinColumn(name ="program_id"))
+	@JsonIgnore
+	@Builder.Default
 	private Set<Program> programs = new HashSet<>();
 	
 	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
+	@Builder.Default
 	private Set<Group> groups = new HashSet<>();
 	
 	
+	//Helper method
 	public void addProgram(Program program) {
 		this.programs.add(program);
 		program.getRoles().add(this);
@@ -52,38 +72,4 @@ public class Role extends BaseEntity {
 		this.programs.remove(program);
 		program.getRoles().add(this);
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Set<Program> getPrograms() {
-		return programs;
-	}
-
-	public void setPrograms(Set<Program> programs) {
-		this.programs = programs;
-	}
-
-	public Set<Group> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(Set<Group> groups) {
-		this.groups = groups;
-	}
-	
-	
 }

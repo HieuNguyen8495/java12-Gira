@@ -1,0 +1,20 @@
+Configuration:
+  name: log4j2config
+  
+  Appenders:
+    Consolers:
+      name: ConsoleLog
+      target: SYSTEM_OUT
+      PatternLayouts:
+        Pattern: ""
+    
+    RollingFile:
+      name: RollingFileAppender 
+    
+    
+  Loggers:
+    Root:
+     level: trace
+     AppenderRef: 
+        - Ref: ConsoleLog
+        - Ref: RollingFileAppender 

@@ -23,7 +23,7 @@ import cybersoft.backend.java12.gira.role.entity.Role;
 import cybersoft.backend.java12.gira.role.service.itf.RoleService;
 
 @RestController
-@RequestMapping("/api/role")
+@RequestMapping("api/role")
 public class RoleController {
 	private RoleService service;
 	

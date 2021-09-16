@@ -32,10 +32,13 @@ public class RoleServiceImpl implements RoleService {
 	
 	@Override
 	public Role addNewRole(CreateRoleDto dto) {
-		Role newRole = new Role();
-		
-		newRole.setName(dto.getName().toUpperCase());
-		newRole.setDescription(dto.getDescription());
+//		Role newRole = new Role();
+//		newRole.setName(dto.getName().toUpperCase());
+//		newRole.setDescription(dto.getDescription());
+		Role newRole = Role.builder()
+					.name(dto.getName())
+					.description((dto.getDescription()))
+					.build();
 		
 		return repository.save(newRole);
 	}
